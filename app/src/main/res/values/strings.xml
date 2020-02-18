@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">SafeToFly</string>
+    <string name="address">Silverton, OR 97381</string>
+    <string name="time">2m ago from DarkSky</string>
+    <string name="temp">80 F</string>
+    <string name="tstorms">Thunderstorms</string>
+    <string name="half">50%</string>
+    <string name="agl">500 AGL</string>
+    <string name="cloud_cover">50% cloud cover</string>
+    <string name="some_time">0:21</string>
+    <string name="daylight_remaining">Daylight remaining</string>
+    <string name="sunrise">6:22 am</string>
+    <string name="sunrise_text">Sunrise</string>
+    <string name="sunset">8:13 pm</string>
+    <string name="sunset_text">Sunset</string>
+    <string name="wind_speed">15 mph</string>
+    <string name="wind_dir">SW (220)</string>
+    <string name="gusts">Gusts: 25 MPH</string>
+    <string name="visibility">3sm</string>
+    <string name="visText">Visibility</string>
+    <string name="status_of_temp">Status of Temp</string>
+    <string name="status_of_wind">Status of Wind</string>
+    <string name="status_of_visibility">Status of Visibility</string>
+    <string name="binoculars">Binoculars</string>
+    <string name="raindrop">Raindrop</string>
+    <string name="status_of_clouds">Status of Clouds</string>
+    <string name="cloud_icon">Cloud Icon</string>
+    <string name="status_of_time">Status of Time</string>
+    <string name="time_of_day_icon">Time of Day Icon</string>
+</resources>

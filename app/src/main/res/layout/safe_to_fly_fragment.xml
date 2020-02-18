@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:viewBindingIgnore="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"> <!-- tools: Show data only in preview. -->
+
+    <!-- Top line -->
+    <TextView
+        android:id="@+id/location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        tools:textStyle="bold"
+        tools:textColor="@color/black"
+        tools:textSize="@dimen/font_size"
+        android:layout_marginTop="@dimen/large"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:text="@string/address" />
+
+    <!-- Second line -->
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        tools:textSize="@dimen/font_size"
+        tools:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/location"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:text="@string/time" />
+
+    <!-- Top Left Box 1,1 -->
+    <ImageView
+        android:id="@+id/tempStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/tstorm"
+        android:layout_marginTop="@dimen/topMargin"
+        android:layout_marginStart="@dimen/leftMargin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/time"
+        android:contentDescription="@string/status_of_temp"/>
+
+    <TextView
+        android:id="@+id/temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        tools:textSize="@dimen/font_size"
+        tools:textStyle="bold"
+        tools:textColor="@color/black"
+        android:layout_marginTop="@dimen/topMargin"
+        android:layout_marginStart="@dimen/small"
+        app:layout_constraintLeft_toRightOf="@id/tempStatus"
+        app:layout_constraintTop_toBottomOf="@id/time"
+        tools:text="@string/temp" />
+
+    <TextView
+        android:id="@+id/tempText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        tools:textColor="@color/black"
+        tools:textSize="@dimen/med_text_size"
+        android:padding="0dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintLeft_toLeftOf="@id/temp"
+        app:layout_constraintTop_toBottomOf="@id/tempStatus"
+        tools:text="@string/tstorms" />
+
+    <ImageView
+        android:id="@+id/rainDrop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/drop"
+        android:layout_marginTop="@dimen/small"
+        app:layout_constraintLeft_toLeftOf="@id/temp"
+        app:layout_constraintTop_toBottomOf="@id/tempText"
+        android:contentDescription="@string/raindrop"/>
+
+    <TextView
+        android:id="@+id/precipText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        tools:textColor="@color/black"
+        tools:textSize="@dimen/med_text_size"
+        android:padding="0dp"
+        android:layout_marginStart="@dimen/small"
+        android:layout_marginTop="@dimen/small"
+        app:layout_constraintLeft_toRightOf="@id/rainDrop"
+        app:layout_constraintTop_toBottomOf="@id/tempText"
+        tools:text="@string/half" />
+
+    <!-- Middle Left Box 1,2 -->
+    <ImageView
+        android:id="@+id/cloudStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/stop"
+        android:layout_marginTop="@dimen/aboveMargin"
+        app:layout_constraintLeft_toLeftOf="@id/tempStatus"
+        app:layout_constraintTop_toBottomOf="@id/precipText"
+        android:contentDescription="@string/status_of_clouds"/>
+
+    <ImageView
+        android:id="@+id/cloudIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/cloudy"
+        android:layout_marginTop="@dimen/aboveMargin"
+        app:layout_constraintLeft_toLeftOf="@id/rainDrop"
+        app:layout_constraintTop_toBottomOf="@id/precipText"
+        android:contentDescription="@string/cloud_icon"/>
+
+    <TextView
+        android:id="@+id/cloudText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        tools:textColor="@color/black"
+        tools:textStyle="bold"
+        tools:textSize="@dimen/med_text_size"
+        android:layout_marginTop="@dimen/aboveMargin"
+        android:layout_marginStart="@dimen/small"
+        app:layout_constraintLeft_toRightOf="@id/cloudIcon"
+        app:layout_constraintTop_toBottomOf="@id/precipText"
+        tools:text="@string/agl" />
+
+    <TextView
+        android:id="@+id/cloudCeil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        tools:textColor="@color/black"
+        tools:textSize="@dimen/med_text_size"
+        android:layout_marginTop="@dimen/small"
+        app:layout_constraintLeft_toLeftOf="@id/cloudIcon"
+        app:layout_constraintTop_toBottomOf="@id/cloudIcon"
+        tools:text="@string/cloud_cover" />
+
+    <!-- Bottom Left Box 1,3 -->
+    <ImageView
+        android:id="@+id/todStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/warn"
+        android:layout_marginTop="@dimen/aboveMargin"
+        app:layout_constraintLeft_toLeftOf="@id/tempStatus"
+        app:layout_constraintTop_toBottomOf="@id/cloudCeil"
+        android:contentDescription="@string/status_of_time"/>
+
+    <ImageView
+        android:id="@+id/todIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/clock"
+        android:layout_marginStart="@dimen/small"
+        android:layout_marginTop="@dimen/aboveMargin"
+        app:layout_constraintLeft_toRightOf="@id/todStatus"
+        app:layout_constraintTop_toBottomOf="@id/cloudCeil"
+        android:contentDescription="@string/time_of_day_icon"/>
+
+    <TextView
+        android:id="@+id/daylight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        tools:textColor="@color/black"
+        tools:textStyle="bold"
+        tools:textSize="@dimen/med_text_size"
+        android:layout_marginTop="@dimen/aboveMargin"
+        android:layout_marginStart="@dimen/small"
+        app:layout_constraintLeft_toRightOf="@id/todIcon"
+        app:layout_constraintTop_toBottomOf="@id/cloudCeil"
+        tools:text="@string/some_time" />
+
+    <TextView
+        android:id="@+id/remain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        tools:textColor="@color/black"
+        tools:textSize="@dimen/med_text_size"
+        android:layout_marginTop="@dimen/small"
+        app:layout_constraintLeft_toLeftOf="@id/todIcon"
+        app:layout_constraintTop_toBottomOf="@id/todIcon"
+        tools:text="@string/daylight_remaining" />
+
+    <TextView
+        android:id="@+id/sunrise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        tools:textColor="@color/black"
+        tools:textSize="@dimen/med_text_size"
+        android:layout_marginTop="@dimen/small"
+        app:layout_constraintLeft_toLeftOf="@id/todIcon"
+        app:layout_constraintTop_toBottomOf="@id/remain"
+        tools:text="@string/sunrise" />
+
+    <TextView
+        android:id="@+id/sunset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        tools:textColor="@color/black"
+        tools:textSize="@dimen/med_text_size"
+        android:layout_marginTop="@dimen/small"
+        android:layout_marginStart="@dimen/med"
+        app:layout_constraintLeft_toRightOf="@id/sunrise"
+        app:layout_constraintTop_toBottomOf="@id/remain"
+        tools:text="@string/sunset" />
+
+    <TextView
+        android:id="@+id/sunriseText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        tools:textColor="@color/black"
+        tools:textSize="@dimen/med_text_size"
+        android:layout_marginTop="@dimen/tiny"
+        app:layout_constraintLeft_toLeftOf="@id/todIcon"
+        app:layout_constraintTop_toBottomOf="@id/sunrise"
+        tools:text="@string/sunrise_text" />
+
+    <TextView
+        android:id="@+id/sunsetText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        tools:textColor="@color/black"
+        tools:textSize="@dimen/med_text_size"
+        android:layout_marginTop="@dimen/tiny"
+        app:layout_constraintLeft_toLeftOf="@id/sunset"
+        app:layout_constraintTop_toBottomOf="@id/sunrise"
+        tools:text="@string/sunset_text" />
+
+    <!-- Top Right Box 2,1 -->
+    <ImageView
+        android:id="@+id/windStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/windspeed"
+        android:layout_marginTop="@dimen/topMargin"
+        android:layout_marginStart="@dimen/rightColMargin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/time"
+        android:contentDescription="@string/status_of_wind"/>
+
+    <TextView
+        android:id="@+id/wind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        tools:textSize="@dimen/font_size"
+        tools:textStyle="bold"
+        tools:textColor="@color/black"
+        android:layout_marginTop="@dimen/topMargin"
+        android:layout_marginStart="@dimen/small"
+        app:layout_constraintLeft_toRightOf="@id/windStatus"
+        app:layout_constraintTop_toBottomOf="@id/time"
+        tools:text="@string/wind_speed" />
+
+    <TextView
+        android:id="@+id/windDir"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        tools:textColor="@color/black"
+        tools:textSize="@dimen/med_text_size"
+        android:padding="0dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintLeft_toLeftOf="@id/wind"
+        app:layout_constraintTop_toBottomOf="@id/tempStatus"
+        tools:text="@string/wind_dir" />
+
+    <TextView
+        android:id="@+id/gusts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        tools:textColor="@color/black"
+        tools:textSize="@dimen/med_text_size"
+        app:layout_constraintLeft_toLeftOf="@id/windDir"
+        app:layout_constraintTop_toBottomOf="@id/windDir"
+        tools:text="@string/gusts" />
+
+    <!-- Middle Right Box 2,2 -->
+    <ImageView
+        android:id="@+id/visStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/warn"
+        android:layout_marginTop="@dimen/aboveMargin"
+        app:layout_constraintLeft_toLeftOf="@id/windStatus"
+        app:layout_constraintTop_toBottomOf="@id/gusts"
+        android:contentDescription="@string/status_of_visibility"/>
+
+    <ImageView
+        android:id="@+id/binos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/bino"
+        android:layout_marginTop="@dimen/aboveMargin"
+        app:layout_constraintLeft_toLeftOf="@id/gusts"
+        app:layout_constraintTop_toBottomOf="@id/gusts"
+        android:contentDescription="@string/binoculars"/>
+
+    <TextView
+        android:id="@+id/vis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        tools:textColor="@color/black"
+        tools:textStyle="bold"
+        tools:textSize="@dimen/med_text_size"
+        android:layout_marginTop="@dimen/aboveMargin"
+        android:layout_marginStart="@dimen/small"
+        app:layout_constraintLeft_toRightOf="@id/binos"
+        app:layout_constraintTop_toBottomOf="@id/precipText"
+        tools:text="@string/visibility" />
+
+    <TextView
+        android:id="@+id/visText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        tools:textColor="@color/black"
+        tools:textSize="@dimen/med_text_size"
+        android:layout_marginTop="@dimen/small"
+        app:layout_constraintLeft_toLeftOf="@id/binos"
+        app:layout_constraintTop_toBottomOf="@id/vis"
+        tools:text="@string/visText" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
