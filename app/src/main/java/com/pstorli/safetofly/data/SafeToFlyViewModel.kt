@@ -21,7 +21,8 @@ class SafeToFlyViewModel : ViewModel() {
     var precipitationStatus = Status.GREEN
 
     // Vars dealing with the actual values from DarkSky web service.
-    // TODO Note we are using ThreeTenABP instead of java's Date due to min sdk at 15 intead of 26
+    // TODO Note we are using Date instead of java's Date due to min sdk at 15 intead of 26
+    // ThreeTenABP  had issues
     // https://www.threeten.org/threetenbp/apidocs/org/threeten/bp/package-summary.html
     // https://github.com/JakeWharton/ThreeTenABP
     var sunrise             = Date()
@@ -32,7 +33,7 @@ class SafeToFlyViewModel : ViewModel() {
     var cloudCover          = .5
     var timeOfDay           = Date()
     var windSpeed           = 1
-    var windDir             = 0
+    var windDir             = 0.0
     var gusts               = 0
     var temperature         = 70
     var precipitation       = .1

@@ -1,32 +1,57 @@
 <resources>
+    <string name="agl">%1$s AGL</string>
     <string name="app_name">SafeToFly</string>
-    <string name="address">Silverton, OR 97381</string>
-    <string name="time">2m ago from DarkSky</string>
-    <string name="temp">80 F</string>
-    <string name="tstorms">Thunderstorms</string>
-    <string name="half">50%</string>
-    <string name="agl">500 AGL</string>
-    <string name="cloud_cover">50% cloud cover</string>
-    <string name="some_time">0:21</string>
-    <string name="daylight_remaining">Daylight remaining</string>
-    <string name="sunrise">6:22 am</string>
-    <string name="sunrise_text">Sunrise</string>
-    <string name="sunset">8:13 pm</string>
-    <string name="sunset_text">Sunset</string>
-    <string name="wind_speed">15 mph</string>
-    <string name="wind_dir">SW (220)</string>
-    <string name="gusts">Gusts: 25 MPH</string>
-    <string name="visibility">3sm</string>
-    <string name="visText">Visibility</string>
-    <string name="status_of_temp">Status of Temp</string>
-    <string name="status_of_wind">Status of Wind</string>
-    <string name="status_of_visibility">Status of Visibility</string>
-    <string name="binoculars">Binoculars</string>
-    <string name="raindrop">Raindrop</string>
-    <string name="status_of_clouds">Status of Clouds</string>
-    <string name="cloud_icon">Cloud Icon</string>
-    <string name="status_of_time">Status of Time</string>
-    <string name="time_of_day_icon">Time of Day Icon</string>
-    <string name="weather">WEATHER</string>
+
+    <!-- Content descriptions for images.-->
+    <string name="cd_status_of_clouds">Status of Clouds</string>
+    <string name="cd_status_of_temp">Status of Temp</string>
+    <string name="cd_status_of_time">Status of Time</string>
+    <string name="cd_status_of_visibility">Status of Visibility</string>
+    <string name="cd_status_of_wind">Status of Wind</string>
+    <string name="cd_time_of_day_icon">Time of Day Icon</string>
+
+    <string name="click_plane">Click plane in action bar to refresh data.</string>
+    <string name="cloud_cover">%1$s%% cloud cover</string>
+    <string name="cloudy">Cloudy</string>
+    <string name="daylight_remaining">Daylight Remaining</string>
+
+    <!-- Default values for the layout tools to use. -->
+    <string name="def_address">Silverton, OR 97381</string>
+    <string name="def_agl">500 AGL</string>
+    <string name="def_cloud_cover">50% cloud cover</string>
+    <string name="def_daylight">0:21</string>
+    <string name="def_gusts">Gusts: 25 MPH</string>
+    <string name="def_precip">50%</string>
+    <string name="def_sunrise">6:22 am</string>
+    <string name="def_sunset">8:13 pm</string>
+    <string name="def_temp">80 F</string>
+    <string name="def_time">2m ago from DarkSky</string>
+    <string name="def_visibility">3sm</string>
+    <string name="def_wind_dir">SW (220)</string>
+    <string name="def_wind_speed">15 mph</string>
+
+    <string name="gusts">Gusts: %1$s MPH</string>
+    <string name="precip">%1$s%%</string>
     <string name="overall_status">Overall Status</string>
+    <string name="raindrop">Raindrop</string>
+    <string name="sunny">Sunny</string>
+    <string name="sunrise_text">Sunrise</string>
+    <string name="sunset_text">Sunset</string>
+    <string name="temp">%1$s F</string>
+    <string name="tstorms">Thunderstorms</string>
+    <string name="visibility">%1$ssm</string>
+    <string name="visText">Visibility</string>
+    <string name="weather">WEATHER</string>
+    <string name="wind_dir">%1$s (%2$s)</string>
+    <string name="wind_dir_east">E</string>
+    <string name="wind_dir_north">N</string>
+    <string name="wind_dir_north_east">NE</string>
+    <string name="wind_dir_north_west">NW</string>
+    <string name="wind_dir_south">S</string>
+    <string name="wind_dir_south_east">SE</string>
+    <string name="wind_dir_south_west">SW</string>
+    <string name="wind_dir_west">W</string>
+    <string name="unknown">Unknown</string>
+
+
 </resources>

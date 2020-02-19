@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageButton
 import com.pstorli.safetofly.screens.main.SafeToFlyFragment
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,9 +39,15 @@ class MainActivity : AppCompatActivity() {
 
             actionBar.setCustomView(customView)
             actionBar.setDisplayShowCustomEnabled(true)
+
+            Snackbar.make(customView, getString (R.string.click_plane), Snackbar.LENGTH_LONG).show()
         }
 
         showFragment (SafeToFlyFragment(imageButton))
+
+
+
+
     }
 
     /**

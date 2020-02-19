@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="topMargin">40dp</dimen>
-    <dimen name="aboveMargin">50dp</dimen>
-    <dimen name="leftMargin">8dp</dimen>
-    <dimen name="rightColMargin">220dp</dimen>
+
+
+    <dimen name="font_size">16sp</dimen>
+    <dimen name="font_size_bold">18sp</dimen>
+    <dimen name="font_size_med">18sp</dimen>
+
     <dimen name="large">40dp</dimen>
+
+    <dimen name="margin_bottom">50dp</dimen>
+    <dimen name="margin_left">8dp</dimen>
+    <dimen name="margin_middle">45dp</dimen>
+    <dimen name="margin_top">25dp</dimen>
+
     <dimen name="med">20dp</dimen>
+    <dimen name="rightColMargin">110dp</dimen>
     <dimen name="small">10dp</dimen>
     <dimen name="tiny">2dp</dimen>
-    <dimen name="font_size">26sp</dimen>
-    <dimen name="med_text_size">18sp</dimen>
+
 </resources>

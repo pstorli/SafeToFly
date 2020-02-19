@@ -1,6 +1,5 @@
 package com.pstorli.safetofly.screens.main
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,19 +13,22 @@ import androidx.lifecycle.ViewModelProvider
 import com.pstorli.safetofly.R
 import com.pstorli.safetofly.data.SafeToFlyViewModel
 import com.pstorli.safetofly.util.Status
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SafeToFlyFragment (imageButton: ImageButton?) : Fragment() {
     private lateinit var viewModel: SafeToFlyViewModel
+
+    private val dateFormat: DateFormat = SimpleDateFormat("hh:mm a", Locale.US)
 
     private var overallStatusButton: ImageButton? // This can be null.
 
     // TODO Change to use new Google binding feature will eliminate these. https://developer.android.com/topic/libraries/view-binding
     // Fields with ids from safe_to_fly_fragment.xml
-    private lateinit var binos:         ImageView
     private lateinit var cloudCeil:     TextView
     private lateinit var cloudCover:    TextView
     private lateinit var cloudStatus:   ImageView
-    private lateinit var cloudText:     TextView
     private lateinit var daylight:      TextView
     private lateinit var gusts:         TextView
     private lateinit var location:      TextView
@@ -41,7 +43,6 @@ class SafeToFlyFragment (imageButton: ImageButton?) : Fragment() {
     private lateinit var tempStatus:    ImageView
     private lateinit var tempText:      TextView
     private lateinit var time:          TextView
-    private lateinit var todIcon:       ImageView
     private lateinit var todStatus:     ImageView
     private lateinit var vis:           TextView
     private lateinit var visStatus:     ImageView
@@ -92,7 +93,7 @@ class SafeToFlyFragment (imageButton: ImageButton?) : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         // /////////////////////////////////////////////////////////////////////////////////////////
-        // TODO: Change o use view and data binding.
+        // TODO: Change to use view and data binding.
         // /////////////////////////////////////////////////////////////////////////////////////////
 
         // Get the view model.
@@ -147,7 +148,7 @@ class SafeToFlyFragment (imageButton: ImageButton?) : Fragment() {
             Status.GREEN    -> visStatus.setImageResource(R.drawable.bino_green)
         }
 
-        vis.text = viewModel.visibility.toString()+"M"
+        vis.text = getString(R.string.visibility,viewModel.visibility.toString())
     }
 
     /**
@@ -156,14 +157,15 @@ class SafeToFlyFragment (imageButton: ImageButton?) : Fragment() {
     private fun updateCloudCeiling ()
     {
         when (viewModel.cloudCeilingStatus) {
-            Status.RED      -> cloudStatus.setImageResource(R.drawable.cloudy_red)
-            Status.YELLOW   -> cloudStatus.setImageResource(R.drawable.cloudy_yellow)
-            Status.GREEN    -> cloudStatus.setImageResource(R.drawable.cloudy_green)
+            Status.RED        -> cloudStatus.setImageResource(R.drawable.cloudy_red)
+            Status.YELLOW     -> cloudStatus.setImageResource(R.drawable.cloudy_yellow)
+            Status.GREEN      -> cloudStatus.setImageResource(R.drawable.cloudy_green)
         }
 
-        cloudCeil.text  = viewModel.cloudCeiling.toString() + "AGL"
-        cloudCover.text = (100 * viewModel.cloudCeiling).toString() + "%"
+        cloudCeil.text        = getString(R.string.agl, viewModel.cloudCeiling.toString())
 
+        val cloudCoverPercent = (100 * viewModel.cloudCover)
+        cloudCover.text       = getString(R.string.cloud_cover, cloudCoverPercent.toString())
     }
 
     /**
@@ -178,8 +180,9 @@ class SafeToFlyFragment (imageButton: ImageButton?) : Fragment() {
         }
 
         daylight.text = viewModel.daylight
-        sunrise.text  = viewModel.sunrise.toString()
-        sunset.text   = viewModel.sunset.toString()
+
+        sunrise.text  = dateFormat.format(viewModel.sunrise)
+        sunset.text   = dateFormat.format(viewModel.sunset)
     }
 
     /**
@@ -193,8 +196,36 @@ class SafeToFlyFragment (imageButton: ImageButton?) : Fragment() {
             Status.GREEN    -> windStatus.setImageResource(R.drawable.wind_speed_green)
         }
 
-        windDir.text = viewModel.windDir.toString() // TODO SW (220)
-        gusts.text   = "Gusts" + viewModel.gusts.toString() + "MPH" // TODO - Use resource string w/param for gust
+        // Set gusts.
+        gusts.text   = getString(R.string.gusts,viewModel.gusts.toString())
+
+        // Set windspeed and compute wind dir.
+
+        // Compute what eighth of circle we are in.
+        val windy = viewModel.windDir / 45.0
+
+        // Now set dir based on windy. (TODO Shame when won't work here. Pos make this section a function)
+        var windDirection = getString(R.string.unknown)
+        if (       windy <= 22.5  || windy >  337.5) {
+            windDirection = getString (R.string.wind_dir_east)
+        } else if (windy >  22.5  && windy <=  67.5) {
+            windDirection = getString (R.string.wind_dir_north_east)
+        } else if (windy >  67.5  && windy <= 112.5) {
+            windDirection = getString (R.string.wind_dir_north)
+        } else if (windy > 112.5  && windy <= 157.5) {
+            windDirection = getString (R.string.wind_dir_north_west)
+        } else if (windy > 157.5  && windy <= 202.5) {
+            windDirection = getString (R.string.wind_dir_west)
+        } else if (windy > 202.5  && windy <= 247.5) {
+            windDirection = getString (R.string.wind_dir_south_west)
+        } else if (windy > 247.5  && windy <= 292.5) {
+            windDirection = getString (R.string.wind_dir_south)
+        } else if (windy > 292.5  && windy <= 337.5) {
+            windDirection = getString (R.string.wind_dir_south_east)
+        }
+
+        //
+        windDir.text = getString(R.string.wind_dir, windDirection, viewModel.windDir.toString())
     }
 
     /**
@@ -203,12 +234,21 @@ class SafeToFlyFragment (imageButton: ImageButton?) : Fragment() {
     private fun updateTemperature ()
     {
         when (viewModel.tempStatus) {
-            Status.RED      -> tempStatus.setImageResource(R.drawable.tstorm_red)
-            Status.YELLOW   -> tempStatus.setImageResource(R.drawable.tstorm_yellow)
-            Status.GREEN    -> tempStatus.setImageResource(R.drawable.tstorm_green)
+            Status.RED      -> {
+                tempStatus.setImageResource(R.drawable.tstorm_red)
+                tempText.text = getString(R.string.tstorms)
+            }
+            Status.YELLOW   -> {
+                tempStatus.setImageResource(R.drawable.tstorm_yellow)
+                tempText.text = getString(R.string.cloudy)
+            }
+            Status.GREEN    -> {
+                tempStatus.setImageResource(R.drawable.tstorm_green)
+                tempText.text = getString(R.string.sunny)
+            }
         }
 
-        temp.text = viewModel.temperature.toString() + "F" // TODO - Use resource string w/param for temp
+        temp.text = getString(R.string.temp, viewModel.temperature.toString())
     }
 
     /**
@@ -222,7 +262,7 @@ class SafeToFlyFragment (imageButton: ImageButton?) : Fragment() {
             Status.GREEN    -> rainDrop.setImageResource(R.drawable.drop_green)
         }
 
-        precipText.text = viewModel.precipitation.toString() + "%" // TODO - Use resource string w/param for precip
+        precipText.text = getString(R.string.precip, viewModel.precipitation.toString())
     }
 
 }
