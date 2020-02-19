@@ -2,6 +2,9 @@ package com.pstorli.safetofly
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.ImageButton
 import com.pstorli.safetofly.screens.main.SafeToFlyFragment
 
 class MainActivity : AppCompatActivity() {
@@ -13,14 +16,31 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Add Walmart splash icon to toolbar.
+        var imageButton: ImageButton? = null
         val actionBar = getSupportActionBar()
         if (null != actionBar) {
             actionBar.setDisplayShowHomeEnabled(true)
-            actionBar.setIcon(R.drawable.ic_launcher)
+            actionBar.setDisplayShowTitleEnabled(false)
+            val mInflater = LayoutInflater.from(this)
+
+            val customView = mInflater.inflate(R.layout.custom_actionbar, null)
+
+            imageButton = customView.findViewById(R.id.imageButton) as ImageButton
+            imageButton.setOnClickListener(object : View.OnClickListener {
+
+                override fun onClick(view: View) {
+                    val currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container)
+                    if (currentFragment is SafeToFlyFragment) {
+                        currentFragment.updateStatus()
+                    }
+                }
+            })
+
+            actionBar.setCustomView(customView)
+            actionBar.setDisplayShowCustomEnabled(true)
         }
 
-        showFragment (SafeToFlyFragment())
+        showFragment (SafeToFlyFragment(imageButton))
     }
 
     /**
@@ -35,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         val transaction = manager.beginTransaction()
 
         // Replace the fragment on container
-        transaction.replace(R.id.container, fragment)
+        transaction.replace(R.id.fragment_container, fragment)
         transaction.addToBackStack(null)
 
         // Finishing the transition

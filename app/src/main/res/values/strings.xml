@@ -27,4 +27,6 @@
     <string name="cloud_icon">Cloud Icon</string>
     <string name="status_of_time">Status of Time</string>
     <string name="time_of_day_icon">Time of Day Icon</string>
+    <string name="weather">WEATHER</string>
+    <string name="overall_status">Overall Status</string>
 </resources>

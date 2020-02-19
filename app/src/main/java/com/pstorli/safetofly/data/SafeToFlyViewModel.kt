@@ -4,7 +4,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.pstorli.safetofly.util.Status
-import java.time.LocalDateTime
+// import org.threeten.bp.Date - This is having issues for ver 15, using Date instead
+import java.util.*
 
 class SafeToFlyViewModel : ViewModel() {
 
@@ -20,14 +21,22 @@ class SafeToFlyViewModel : ViewModel() {
     var precipitationStatus = Status.GREEN
 
     // Vars dealing with the actual values from DarkSky web service.
-    var sunrise             = LocalDateTime.now()
-    var sunset              = LocalDateTime.now()
+    // TODO Note we are using ThreeTenABP instead of java's Date due to min sdk at 15 intead of 26
+    // https://www.threeten.org/threetenbp/apidocs/org/threeten/bp/package-summary.html
+    // https://github.com/JakeWharton/ThreeTenABP
+    var sunrise             = Date()
+    var sunset              = Date()
+    var daylight            = "0:0"
     var visibility          = 5
     var cloudCeiling        = 1000
-    var timeOfDay           = LocalDateTime.now()
+    var cloudCover          = .5
+    var timeOfDay           = Date()
     var windSpeed           = 1
+    var windDir             = 0
+    var gusts               = 0
     var temperature         = 70
     var precipitation       = .1
+
 
     init {
         Log.d (this.toString(), "SafeToFlyViewModel created")
@@ -101,12 +110,13 @@ class SafeToFlyViewModel : ViewModel() {
      * value Less than 30 minutes after sunset | Yellow
      * value 30 min after sunset and 30 minutes before sunrise | Red
      */
-    private fun updateTimeOfDay (value: LocalDateTime)
+    @Suppress("DEPRECATION") // TODO Using date for now, need to use LocalDateTime instead when sdk min can be greater than 15
+    private fun updateTimeOfDay (value: Date)
     {
-        if (value.hour > sunrise.hour && sunset.hour - value.hour > 1) {
+        if (value.hours > sunrise.hours && sunset.hours - value.hours > 1) {
             timeOfDayStatus = Status.GREEN
         }
-        else if ((sunset.hour - value.hour < 1) || (sunrise.hour - value.hour <= 30) || (sunset.hour - value.hour <= 30)) {
+        else if ((sunset.hours - value.hours < 1) || (sunrise.hours - value.hours <= 30) || (sunset.hours - value.hours <= 30)) {
             timeOfDayStatus = Status.YELLOW
         }
         else { // 30 min after sunset and 30 minutes before sunrise
