@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.pstorli.safetofly.MainActivity
 import com.pstorli.safetofly.R
 import com.pstorli.safetofly.data.SafeToFlyViewModel
 import com.pstorli.safetofly.util.Status
@@ -17,12 +18,10 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class SafeToFlyFragment (imageButton: ImageButton?) : Fragment() {
-    private lateinit var viewModel: SafeToFlyViewModel
+class SafeToFlyFragment () : Fragment() {
+    lateinit var viewModel: SafeToFlyViewModel
 
     private val dateFormat: DateFormat = SimpleDateFormat("hh:mm a", Locale.US)
-
-    private var overallStatusButton: ImageButton? // This can be null.
 
     // TODO Change to use new Google binding feature will eliminate these. https://developer.android.com/topic/libraries/view-binding
     // Fields with ids from safe_to_fly_fragment.xml
@@ -50,11 +49,6 @@ class SafeToFlyFragment (imageButton: ImageButton?) : Fragment() {
     private lateinit var wind:          TextView
     private lateinit var windDir:       TextView
     private lateinit var windStatus:    ImageView
-
-    init {
-        // Store this so we can update it.
-        overallStatusButton = imageButton
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.safe_to_fly_fragment, container, false)
@@ -131,9 +125,9 @@ class SafeToFlyFragment (imageButton: ImageButton?) : Fragment() {
     fun updateOverallStatus ()
     {
         when (viewModel.overallStatus.value?:Status.RED) {
-            Status.RED      -> overallStatusButton?.setImageResource(R.drawable.drone_red)
-            Status.YELLOW   -> overallStatusButton?.setImageResource(R.drawable.drone_yellow)
-            Status.GREEN    -> overallStatusButton?.setImageResource(R.drawable.drone_green)
+            Status.RED      -> MainActivity.instance.overallStatusButton.setImageResource(R.drawable.drone_red)
+            Status.YELLOW   -> MainActivity.instance.overallStatusButton.setImageResource(R.drawable.drone_yellow)
+            Status.GREEN    -> MainActivity.instance.overallStatusButton.setImageResource(R.drawable.drone_green)
         }
     }
 

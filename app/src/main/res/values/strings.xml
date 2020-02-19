@@ -31,6 +31,7 @@
     <string name="def_wind_speed">15 mph</string>
 
     <string name="gusts">Gusts: %1$s MPH</string>
+    <string name="lat_lon">Lat: %1$s Lon: %2$s</string>
     <string name="precip">%1$s%%</string>
     <string name="overall_status">Overall Status</string>
     <string name="raindrop">Raindrop</string>

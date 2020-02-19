@@ -1,14 +1,21 @@
 package com.pstorli.safetofly.data
 
+import android.content.Context.LOCATION_SERVICE
+import android.location.Location
+import android.location.LocationManager
 import android.util.Log
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.pstorli.safetofly.MainActivity
 import com.pstorli.safetofly.util.Status
 // import org.threeten.bp.Date - This is having issues for ver 15, using Date instead
 import java.util.*
 
 class SafeToFlyViewModel : ViewModel() {
 
+    // Our last known GPS location.
+    var location            = Location ("Storli Designs LLC") // Until really initialized, who knows where we really are.
 
     // Vars that hold the computed statsu that the SafeToFlyFragment watches.
     val STATUS_COUNT        = 6
@@ -25,6 +32,10 @@ class SafeToFlyViewModel : ViewModel() {
     // ThreeTenABP  had issues
     // https://www.threeten.org/threetenbp/apidocs/org/threeten/bp/package-summary.html
     // https://github.com/JakeWharton/ThreeTenABP
+    //
+    // Work around issue that Date needs min sdk 26, and I'm on 15
+    // implementation 'com.jakewharton.threetenabp:threetenabp:1.2.2'
+
     var sunrise             = Date()
     var sunset              = Date()
     var daylight            = "0:0"
@@ -37,7 +48,6 @@ class SafeToFlyViewModel : ViewModel() {
     var gusts               = 0
     var temperature         = 70
     var precipitation       = .1
-
 
     init {
         Log.d (this.toString(), "SafeToFlyViewModel created")
