@@ -33,3 +33,4 @@ Known Issues:
   0000 In SafeToFlyViewModel.update, we are using Date with no time zone. Fix to use LocalDateTime
   0000 Remove jankapotamus.darkskyandroidwrapper and add in my own RDS and retrofit classes to get dark sky data.
   0000 Dark Sky docs state that they return wind gusts for current conditions, but not there in jankapotamus.darkskyandroidwrapper
+  0000 jankapotamus.darkskyandroidwrapper caused several warnings to appear
