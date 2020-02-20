@@ -1,13 +1,13 @@
 package com.pstorli.safetofly.screens.main
 
+import android.location.Geocoder
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.pstorli.safetofly.MainActivity
@@ -17,6 +17,7 @@ import com.pstorli.safetofly.util.Status
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class SafeToFlyFragment () : Fragment() {
     lateinit var viewModel: SafeToFlyViewModel
@@ -129,6 +130,14 @@ class SafeToFlyFragment () : Fragment() {
             Status.YELLOW   -> MainActivity.instance.overallStatusButton.setImageResource(R.drawable.drone_yellow)
             Status.GREEN    -> MainActivity.instance.overallStatusButton.setImageResource(R.drawable.drone_green)
         }
+
+        // Determine the city and state from the lat/lon
+        val geocoder  = Geocoder(MainActivity.instance, Locale.getDefault())
+        val addresses = geocoder.getFromLocation(viewModel.gpsLoc.latitude, viewModel.gpsLoc.longitude, 1)
+        val address   = addresses[0]
+
+        // City, State and zip
+        location.text = getString (R.string.city_state_zip, address.locality, address.adminArea, address.postalCode)
     }
 
     /**
@@ -158,7 +167,7 @@ class SafeToFlyFragment () : Fragment() {
 
         cloudCeil.text        = getString(R.string.agl, viewModel.cloudCeiling.toString())
 
-        val cloudCoverPercent = (100 * viewModel.cloudCover)
+        val cloudCoverPercent:Int = (100.0 * viewModel.cloudCover).toInt()
         cloudCover.text       = getString(R.string.cloud_cover, cloudCoverPercent.toString())
     }
 
@@ -173,10 +182,26 @@ class SafeToFlyFragment () : Fragment() {
             Status.GREEN    -> todStatus.setImageResource(R.drawable.clock_green)
         }
 
-        daylight.text = viewModel.daylight
-
         sunrise.text  = dateFormat.format(viewModel.sunrise)
         sunset.text   = dateFormat.format(viewModel.sunset)
+        time.text     = getString(R.string.dark_sky_time, dateFormat.format(viewModel.timeOfDay.time))
+
+        val daylightLeft = viewModel.sunset.time - viewModel.timeOfDay.time
+
+        // Compute the remaining daylight.
+        var minutes = 0
+        var hours   = 0
+
+        if (daylightLeft>0) {
+            val ms   = daylightLeft/1000.0f
+            val ms60 = (ms / 60.0).toInt()
+            minutes  = ms60 % 60
+            hours    = ms60 / 60
+        }
+
+        // Format sunrise, sunset, time and daylight remaining
+        daylight.text = getString(R.string.hour_min, hours.toString(), minutes.toString())
+
     }
 
     /**
@@ -230,19 +255,20 @@ class SafeToFlyFragment () : Fragment() {
         when (viewModel.tempStatus) {
             Status.RED      -> {
                 tempStatus.setImageResource(R.drawable.tstorm_red)
-                tempText.text = getString(R.string.tstorms)
             }
             Status.YELLOW   -> {
                 tempStatus.setImageResource(R.drawable.tstorm_yellow)
-                tempText.text = getString(R.string.cloudy)
             }
             Status.GREEN    -> {
                 tempStatus.setImageResource(R.drawable.tstorm_green)
-                tempText.text = getString(R.string.sunny)
             }
         }
 
-        temp.text = getString(R.string.temp, viewModel.temperature.toString())
+        // The current temperature
+        temp.text = getString(R.string.temp, viewModel.temp.toString())
+
+        // The current conditions
+        tempText.text =viewModel.conditions
     }
 
     /**

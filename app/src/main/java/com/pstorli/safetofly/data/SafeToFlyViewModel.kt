@@ -1,21 +1,25 @@
 package com.pstorli.safetofly.data
 
-import android.content.Context.LOCATION_SERVICE
 import android.location.Location
-import android.location.LocationManager
 import android.util.Log
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.pstorli.safetofly.MainActivity
+import com.jankapotamus.darkskyandroidwrapper.data.Forecast
+import com.pstorli.safetofly.networky.SafeToFlyRepository
 import com.pstorli.safetofly.util.Status
-// import org.threeten.bp.Date - This is having issues for ver 15, using Date instead
+import java.time.LocalDateTime
 import java.util.*
 
-class SafeToFlyViewModel : ViewModel() {
+class SafeToFlyViewModel : Observer, ViewModel() {
+
+    // The app name. See also r.string.app_name
+    val appName = "SafeToFly"
 
     // Our last known GPS location.
-    var location            = Location ("Storli Designs LLC") // Until really initialized, who knows where we really are.
+    var gpsLoc = Location ("Storli Designs LLC") // Until really initialized, who knows where we really are.
+
+    // This repo holds the forcast. Observe safeToFlyRepository.forcast
+    val safeToFlyRepository = SafeToFlyRepository ()
 
     // Vars that hold the computed statsu that the SafeToFlyFragment watches.
     val STATUS_COUNT        = 6
@@ -27,6 +31,18 @@ class SafeToFlyViewModel : ViewModel() {
     var tempStatus          = Status.GREEN
     var precipitationStatus = Status.GREEN
 
+    /**
+     * Instance of SafeToFlyViewModel
+     */
+    companion object {
+        private lateinit var inst: SafeToFlyViewModel
+
+        val instance: SafeToFlyViewModel
+            get() {
+                return inst
+            }
+    }
+
     // Vars dealing with the actual values from DarkSky web service.
     // TODO Note we are using Date instead of java's Date due to min sdk at 15 intead of 26
     // ThreeTenABP  had issues
@@ -36,27 +52,90 @@ class SafeToFlyViewModel : ViewModel() {
     // Work around issue that Date needs min sdk 26, and I'm on 15
     // implementation 'com.jakewharton.threetenabp:threetenabp:1.2.2'
 
-    var sunrise             = Date()
-    var sunset              = Date()
-    var daylight            = "0:0"
-    var visibility          = 5
     var cloudCeiling        = 1000
     var cloudCover          = .5
-    var timeOfDay           = Date()
-    var windSpeed           = 1
-    var windDir             = 0.0
+    var conditions          = "Sunny"
     var gusts               = 0
-    var temperature         = 70
     var precipitation       = .1
+    var sunrise             = Date()
+    var sunset              = Date()
+    var temp                = 70
+    var timeOfDay           = Date()
+    var visibility          = 5
+    var windDir             = 0
+    var windSpeed           = 1
+
 
     init {
-        Log.d (this.toString(), "SafeToFlyViewModel created")
+        inst = this
+
+        Log.d (appName, "SafeToFlyViewModel created")
+
+        // Tel the rep that we want to be notificed when the forcast changes.
+        safeToFlyRepository.addObserver(this)
+    }
+
+    /**
+     * Get data from DarkSky
+     */
+    fun getData ()
+    {
+        // Tell the repository to get some data.
+        safeToFlyRepository.getData()
+    }
+
+
+    /**
+     * This gets called when the forcast changes by calling getData() above
+     */
+    override fun update(o: Observable?, forecast: Any?) {
+        // Got forecast?
+        if (forecast is Forecast) {
+
+            cloudCover          = forecast.currentConditions.cloudCover
+            conditions          = forecast.currentConditions.summary
+            precipitation       = forecast.currentConditions.precipProbability
+
+            // TODO Instead of picking item 0, go through list and find correct time.
+            if (null != forecast.dailyForecast) {
+                sunrise         = Date(1000L * forecast.dailyForecast.dailyConditionsList[0].sunriseTime)
+                sunset          = Date(1000L * forecast.dailyForecast.dailyConditionsList[0].sunsetTime)
+            }
+
+            temp                = forecast.currentConditions.temperature.toInt()
+            timeOfDay           = Date (1000L * forecast.currentConditions.time)
+            visibility          = forecast.currentConditions.visibility.toInt()
+            windDir             = forecast.currentConditions.windBearing
+            windSpeed           = forecast.currentConditions.windSpeed.toInt()
+
+            // /////////////////////////////////////////////////////////////////////////////////////
+            // Calculate these.
+            // /////////////////////////////////////////////////////////////////////////////////////
+
+            // TODO (temp - dew point) / 4.4 = feet above sea level Check this for accuracy
+            cloudCeiling        = ((temp - forecast.currentConditions.dewPoint) / 4.4).toInt()
+
+            // TODO Currently not getting windGusts data, so fake it.
+            gusts               = ((1..10).random().toDouble() * forecast.currentConditions.windSpeed).toInt() // forecast.currentConditions.windGust
+
+        }
+
+        // Now call member function to update their status.
+        updateVisibility ()
+        updateCloudCeiling()
+        updateTimeOfDay()
+        updateWindSpeed()
+        updateTemperature()
+        updatePrecipitation()
+
+        // Lastly compute the overall status and notfiy the SafeToFlyFragment to update the UI
+        computeOverallStatus ()
     }
 
     override fun onCleared() {
         super.onCleared()
 
-        Log.d (this.toString(), "SafeToFlyViewModel onCleared")
+        Log.d (appName, "SafeToFlyViewModel onCleared")
     }
 
     /**
@@ -75,16 +154,16 @@ class SafeToFlyViewModel : ViewModel() {
     /**
      * Update Visibility Status
      *
-     * value > 3 statute miles | Green
-     * value = 3 statute miles | Yellow
-     * value < 3 statute miles | Red
+     * visibility > 3 statute miles | Green
+     * visibility = 3 statute miles | Yellow
+     * visibility < 3 statute miles | Red
      */
-    private fun updateVisibility (value: Int)
+    private fun updateVisibility ()
     {
-        if (value > 3) {
+        if (visibility > 3) {
             visibilityStatus = Status.GREEN
         }
-        else if (3 == value) {
+        else if (3 == visibility) {
             visibilityStatus = Status.YELLOW
         }
         else { // < 3
@@ -95,16 +174,16 @@ class SafeToFlyViewModel : ViewModel() {
     /**
      * Update CloudCeiling
      *
-     * value > 900 ft AGL (Above Ground Level) | Green
-     * value = 900 ft AGL | Yellow
-     * value < 900 ft AGL | Red
+     * cloudCeiling > 900 ft AGL (Above Ground Level) | Green
+     * cloudCeiling = 900 ft AGL | Yellow
+     * cloudCeiling < 900 ft AGL | Red
      */
-    private fun updateCloudCeiling (value: Int)
+    private fun updateCloudCeiling ()
     {
-        if (value > 900) {
+        if (cloudCeiling > 900) {
             cloudCeilingStatus = Status.GREEN
         }
-        else if (900 == value) {
+        else if (900 == cloudCeiling) {
             cloudCeilingStatus = Status.YELLOW
         }
         else { // < 900
@@ -115,19 +194,19 @@ class SafeToFlyViewModel : ViewModel() {
     /**
      * Update TimeOfDay
      *
-     * value After sunrise and greater than 1 hour from sunset | Green
-     * value Less than 1 hour before sunset | Yellow
-     * value 30 min before sunrise to sunrise | Yellow
-     * value Less than 30 minutes after sunset | Yellow
-     * value 30 min after sunset and 30 minutes before sunrise | Red
+     * timeOfDay After sunrise and greater than 1 hour from sunset | Green
+     * timeOfDay Less than 1 hour before sunset | Yellow
+     * timeOfDay 30 min before sunrise to sunrise | Yellow
+     * timeOfDay Less than 30 minutes after sunset | Yellow
+     * timeOfDay 30 min after sunset and 30 minutes before sunrise | Red
      */
     @Suppress("DEPRECATION") // TODO Using date for now, need to use LocalDateTime instead when sdk min can be greater than 15
-    private fun updateTimeOfDay (value: Date)
+    private fun updateTimeOfDay ()
     {
-        if (value.hours > sunrise.hours && sunset.hours - value.hours > 1) {
+        if (timeOfDay.hours > sunrise.hours && sunset.hours - timeOfDay.hours > 1) {
             timeOfDayStatus = Status.GREEN
         }
-        else if ((sunset.hours - value.hours < 1) || (sunrise.hours - value.hours <= 30) || (sunset.hours - value.hours <= 30)) {
+        else if ((sunset.hours - timeOfDay.hours < 1) || (sunrise.hours - timeOfDay.hours <= 30) || (sunset.hours - timeOfDay.hours <= 30)) {
             timeOfDayStatus = Status.YELLOW
         }
         else { // 30 min after sunset and 30 minutes before sunrise
@@ -138,16 +217,16 @@ class SafeToFlyViewModel : ViewModel() {
     /**
      * Update WindSpeed
      *
-     * value <= 10 mph | Green
-     * value > 10 and <=20 | Yellow
-     * value > 20 | Red
+     * windSpeed <= 10 mph | Green
+     * windSpeed > 10 and <=20 | Yellow
+     * windSpeed > 20 | Red
      */
-    private fun updateWindSpeed (value: Int)
+    private fun updateWindSpeed ()
     {
-        if (value <= 10) {
+        if (windSpeed <= 10) {
             windSpeedStatus = Status.GREEN
         }
-        else if (value > 10 && value <= 20) {
+        else if (windSpeed > 10 && windSpeed <= 20) {
             windSpeedStatus = Status.YELLOW
         }
         else { // > 20
@@ -158,20 +237,20 @@ class SafeToFlyViewModel : ViewModel() {
     /**
      * Update Temperature
      *
-     * value > 50 and <= 80 F | Green
-     * value >= 37 and <= 50 F | Yellow
-     * value > 80 and < 95 F | Yellow
-     * value < 37 F or value >= 95 F | Red
+     * temp > 50 and <= 80 F | Green
+     * temp >= 37 and <= 50 F | Yellow
+     * temp > 80 and < 95 F | Yellow
+     * temp < 37 F or temp >= 95 F | Red
      */
-    private fun updateTemperature (value: Int)
+    private fun updateTemperature ()
     {
-        if (value > 50 && value <= 80) {
+        if (temp > 50 && temp <= 80) {
             tempStatus = Status.GREEN
         }
-        else if ((value >= 37 && value <= 50) || (value > 80 && value < 95)) {
+        else if ((temp >= 37 && temp <= 50) || (temp > 80 && temp < 95)) {
             tempStatus = Status.YELLOW
         }
-        else { // alue < 37 F or value >= 95
+        else { // alue < 37 F or temp >= 95
             tempStatus = Status.RED
         }
     }
@@ -179,19 +258,19 @@ class SafeToFlyViewModel : ViewModel() {
     /**
      * Update Precipitation
      *
-     * value <= .33 | Green
-     * value > .33 and <= .66 | Yellow
-     * value > .66 | Red
+     * precipitation <= .33 | Green
+     * precipitation > .33 and <= .66 | Yellow
+     * precipitation > .66 | Red
      */
-    private fun updatePrecipitation (value: Float)
+    private fun updatePrecipitation ()
     {
-        if (value <= .33) {
+        if (precipitation <= .33) {
             precipitationStatus = Status.GREEN
         }
-        else if (value > .33 && value <= .66) {
+        else if (precipitation > .33 && precipitation <= .66) {
             precipitationStatus = Status.YELLOW
         }
-        else { // value > .66
+        else { // precipitation > .66
             precipitationStatus = Status.RED
         }
     }

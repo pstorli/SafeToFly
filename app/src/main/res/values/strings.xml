@@ -10,9 +10,10 @@
     <string name="cd_status_of_wind">Status of Wind</string>
     <string name="cd_time_of_day_icon">Time of Day Icon</string>
 
+    <string name="city_state_zip">%1$s, %2$s %3$s</string>
     <string name="click_plane">Click plane in action bar to refresh data.</string>
     <string name="cloud_cover">%1$s%% cloud cover</string>
-    <string name="cloudy">Cloudy</string>
+    <string name="dark_sky_time">Time %1$s from DarkSky</string>
     <string name="daylight_remaining">Daylight Remaining</string>
 
     <!-- Default values for the layout tools to use. -->
@@ -25,21 +26,22 @@
     <string name="def_sunrise">6:22 am</string>
     <string name="def_sunset">8:13 pm</string>
     <string name="def_temp">80 F</string>
-    <string name="def_time">2m ago from DarkSky</string>
+    <string name="def_dark_sky_time">2m ago from DarkSky</string>
     <string name="def_visibility">3sm</string>
     <string name="def_wind_dir">SW (220)</string>
     <string name="def_wind_speed">15 mph</string>
 
+    <string name="error_permission">Error obtaining permissions</string>
+
     <string name="gusts">Gusts: %1$s MPH</string>
+    <string name="hour_min">%1$s:%2$s</string>
     <string name="lat_lon">Lat: %1$s Lon: %2$s</string>
     <string name="precip">%1$s%%</string>
     <string name="overall_status">Overall Status</string>
     <string name="raindrop">Raindrop</string>
-    <string name="sunny">Sunny</string>
     <string name="sunrise_text">Sunrise</string>
     <string name="sunset_text">Sunset</string>
     <string name="temp">%1$s F</string>
-    <string name="tstorms">Thunderstorms</string>
     <string name="visibility">%1$ssm</string>
     <string name="visText">Visibility</string>
     <string name="weather">WEATHER</string>
@@ -53,6 +55,7 @@
     <string name="wind_dir_south_west">SW</string>
     <string name="wind_dir_west">W</string>
     <string name="unknown">Unknown</string>
+    <string name="thunderstorms">Thunderstorms</string>
 
 
 </resources>

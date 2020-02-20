@@ -20,8 +20,16 @@ Issues Resolved in version 1000:
        https://developer.android.com/topic/libraries/view-binding
   0000 Finished layout and colored icons for each category status
   0000 Added code to determine gps location.
+  0000 Added DarkSky key to local properties using BuildConfig, for safety.
+  0000 Determined City, State and Zip from lat/lon using android.location.Geocoder
    
 Known Issues:
+
+  0000 Check for correctness Cloud Ceiling formula: (temp - dew point) / 4.4 = feet above sea level
   0000 Have app display map of current GPS location as the background.
   0000 Add an AboutFragment and have it use new Google Screen Navigation system.
   0000 Added android:screenOrientation="portrait" until landscape screen is created and tested.
+  0000 In SafeToFlyViewModel.update, instead of picking item 0, go through list and find correct time for dailyForcast.
+  0000 In SafeToFlyViewModel.update, we are using Date with no time zone. Fix to use LocalDateTime
+  0000 Remove jankapotamus.darkskyandroidwrapper and add in my own RDS and retrofit classes to get dark sky data.
+  0000 Dark Sky docs state that they return wind gusts for current conditions, but not there in jankapotamus.darkskyandroidwrapper

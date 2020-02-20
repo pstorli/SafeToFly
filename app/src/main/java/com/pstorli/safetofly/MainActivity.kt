@@ -12,8 +12,8 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
+import com.pstorli.safetofly.data.SafeToFlyViewModel
 import com.pstorli.safetofly.screens.main.SafeToFlyFragment
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,15 +33,16 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
+    init {
+        inst = this
+    }
+
     /**
      * OnCreate
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        // Remember ourself.
-        inst = this
 
         // GPS Helper
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -65,7 +66,7 @@ class MainActivity : AppCompatActivity() {
             actionBar.setCustomView(customView)
             actionBar.setDisplayShowCustomEnabled(true)
 
-            Snackbar.make(customView, getString (R.string.click_plane), Snackbar.LENGTH_LONG).show()
+            showSnackBar (getString (R.string.click_plane))
         }
 
         showFragment (SafeToFlyFragment())
@@ -81,21 +82,9 @@ class MainActivity : AppCompatActivity() {
             // Where are we?
             getLocation()
         }
-
-        // What's the weather?
-        val safeToFlyFragment = getSafeToFlyFragment ()
-        safeToFlyFragment?.updateStatus()
-    }
-
-    fun getSafeToFlyFragment () : SafeToFlyFragment?
-    {
-        var safeToFlyFragment: SafeToFlyFragment? = null
-        val currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container)
-        if (currentFragment is SafeToFlyFragment) {
-            safeToFlyFragment = currentFragment
+        else {
+            showSnackBar (getString(R.string.error_permission))
         }
-
-        return safeToFlyFragment
     }
 
     /**
@@ -133,16 +122,27 @@ class MainActivity : AppCompatActivity() {
     {
         val task: Task<Location> = fusedLocationClient.getLastLocation()
         task.addOnSuccessListener { location ->
-            val safeToFlyFragment = getSafeToFlyFragment ()
-
             // Got location?
             if (location != null) {
-                safeToFlyFragment?.viewModel?.location = location
-                Snackbar.make(
-                    customView,
-                    getString (R.string.lat_lon, location.latitude.toString(), location.longitude.toString()),
-                    Snackbar.LENGTH_SHORT).show()
+                SafeToFlyViewModel.instance.gpsLoc = location
+
+                // Get new data from Dark Sky. What's the weather?
+                SafeToFlyViewModel.instance.getData()
+
+                // Show the location in the snackbar.
+                showSnackBar (getString (R.string.lat_lon, location.latitude.toString(), location.longitude.toString()))
             }
         }
+    }
+
+    /**
+     * Show the text passed in as a snackbar.
+     */
+    fun showSnackBar (text:String)
+    {
+        Snackbar.make(
+            customView,
+            text,
+            Snackbar.LENGTH_LONG).show()
     }
 }
