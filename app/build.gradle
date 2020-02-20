@@ -18,6 +18,15 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        buildTypes.each {
+            Properties properties = new Properties()
+            properties.load(project.rootProject.file("local.properties").newDataInputStream())
+            def darkSkyApiKey = properties.getProperty("dark_sky_api_key", "")
+
+            it.buildConfigField 'String', 'DARKSKY_API_KEY', darkSkyApiKey
+            it.resValue 'string', "dark_sky_api_key", darkSkyApiKey
+        }
+        
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

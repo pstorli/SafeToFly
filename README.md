@@ -11,8 +11,6 @@ Address: 18529 Chemawa Lne NE, Silverton, OR 97381
 Design:  https://sites.google.com/site/storlidesignsllc/home/safetofly
 Resume:  https://sites.google.com/site/pstorli/resume
 
-DarkSky: 7386af409fd3f453040de57912e0cccb
-
 Issues Resolved in version 1000: 
   0000 Created initial project architecture diagram
   0000 Created project and classes from  architecture diagram in AndroidStudio
