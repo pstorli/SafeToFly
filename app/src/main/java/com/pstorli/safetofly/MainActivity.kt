@@ -1,11 +1,14 @@
 package com.pstorli.safetofly
 
+import android.Manifest
+import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageButton
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -16,7 +19,10 @@ import com.pstorli.safetofly.data.SafeToFlyViewModel
 import com.pstorli.safetofly.screens.main.SafeToFlyFragment
 
 class MainActivity : AppCompatActivity() {
+    // Consts
+    val LOCATION_REQUEST_CODE = 42
 
+    // Vars
     lateinit var overallStatusButton: ImageButton
     lateinit var fusedLocationClient: FusedLocationProviderClient
     lateinit var customView: View
@@ -47,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         // GPS Helper
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        val actionBar = getSupportActionBar()
+        val actionBar = supportActionBar
         if (null != actionBar) {
             actionBar.setDisplayShowHomeEnabled(true)
             actionBar.setDisplayShowTitleEnabled(false)
@@ -63,10 +69,17 @@ class MainActivity : AppCompatActivity() {
                 }
             })
 
-            actionBar.setCustomView(customView)
+            actionBar.customView = customView
             actionBar.setDisplayShowCustomEnabled(true)
 
-            showSnackBar (getString (R.string.click_plane))
+            val msg:String = getString (R.string.click_plane)
+            val clickListener = DialogInterface.OnClickListener{_,which ->
+                // We don't care which button they pressed, just refresh the data.
+                refreshData ()
+            }
+
+            // Show dialog to explain about refresh data.
+            showMessage (msg, clickListener)
         }
 
         showFragment (SafeToFlyFragment())
@@ -78,12 +91,12 @@ class MainActivity : AppCompatActivity() {
     fun refreshData ()
     {
         // Get Permission first.
-        if (checkPermission ()) {
+        if (checkPermission()) {
             // Where are we?
             getLocation()
         }
         else {
-            showSnackBar (getString(R.string.error_permission))
+            requestPermission ()
         }
     }
 
@@ -106,12 +119,23 @@ class MainActivity : AppCompatActivity() {
         transaction.commit()
     }
 
+    fun getSafeToFlyFragment () : SafeToFlyFragment?
+    {
+        var safeToFlyFragment: SafeToFlyFragment? = null
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (currentFragment is SafeToFlyFragment) {
+            safeToFlyFragment = currentFragment
+        }
+
+        return safeToFlyFragment
+    }
+
     /**
      * Check the permission to access GPS
      */
     fun checkPermission () : Boolean
     {
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return false
         }
 
@@ -120,7 +144,7 @@ class MainActivity : AppCompatActivity() {
 
     fun getLocation ()
     {
-        val task: Task<Location> = fusedLocationClient.getLastLocation()
+        val task: Task<Location> = fusedLocationClient.lastLocation
         task.addOnSuccessListener { location ->
             // Got location?
             if (location != null) {
@@ -144,5 +168,42 @@ class MainActivity : AppCompatActivity() {
             customView,
             text,
             Snackbar.LENGTH_LONG).show()
+    }
+
+    /**
+    * Show the text passed in as a snackbar.
+    */
+    fun showMessage (text:String, clickListener:DialogInterface.OnClickListener) {
+        // build alert dialog
+        val dialogBuilder = AlertDialog.Builder(this)
+
+        // set message of alert dialog
+        dialogBuilder.setMessage(text)
+
+            // if the dialog is cancelable
+            .setCancelable(false)
+
+            // positive button text and action
+            .setPositiveButton(getString(R.string.ok), clickListener)
+
+            // negative button text and action
+            .setNegativeButton(getString(R.string.cancel), clickListener)
+
+        // create dialog box
+        val alert = dialogBuilder.create()
+        // set title for alert dialog box
+        alert.setTitle(getString(R.string.question))
+        // show alert dialog
+        alert.show()
+    }
+
+    /**
+     * Ask the user for permission.
+     */
+    fun requestPermission () {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf (Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
+            LOCATION_REQUEST_CODE)
     }
 }

@@ -1,6 +1,7 @@
 <resources>
     <string name="agl">%1$s AGL</string>
     <string name="app_name">SafeToFly</string>
+    <string name="cancel">Cancel</string>
 
     <!-- Content descriptions for images.-->
     <string name="cd_status_of_clouds">Status of Clouds</string>
@@ -37,7 +38,11 @@
     <string name="hour_min">%1$s:%2$s</string>
     <string name="lat_lon">Lat: %1$s Lon: %2$s</string>
     <string name="precip">%1$s%%</string>
+    <string name="ok">OK</string>
     <string name="overall_status">Overall Status</string>
+    <string name="permission_denied">Permission has been denied by user.</string>
+    <string name="permission_granted">Permission has been granted by user.</string>
+    <string name="question">Question</string>
     <string name="raindrop">Raindrop</string>
     <string name="sunrise_text">Sunrise</string>
     <string name="sunset_text">Sunset</string>

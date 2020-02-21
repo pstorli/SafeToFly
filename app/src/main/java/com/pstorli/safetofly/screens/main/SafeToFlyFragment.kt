@@ -19,7 +19,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class SafeToFlyFragment () : Fragment() {
+class SafeToFlyFragment : Fragment() {
+    // Consts
+
+    // Vars
     lateinit var viewModel: SafeToFlyViewModel
 
     private val dateFormat: DateFormat = SimpleDateFormat("hh:mm a", Locale.US)
@@ -51,6 +54,9 @@ class SafeToFlyFragment () : Fragment() {
     private lateinit var windDir:       TextView
     private lateinit var windStatus:    ImageView
 
+    /**
+     * Create the view.
+     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.safe_to_fly_fragment, container, false)
 
@@ -284,5 +290,4 @@ class SafeToFlyFragment () : Fragment() {
 
         precipText.text = getString(R.string.precip, viewModel.precipitation.toString())
     }
-
 }
