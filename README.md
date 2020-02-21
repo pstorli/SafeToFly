@@ -1,17 +1,17 @@
-Name:    Safe To Fly
+Name:    Safe To Fly\\
 
-What:    Shows weather conditions to ensure a safe drone flight.
+What:    Shows weather conditions to ensure a safe drone flight.\\
 
-Author:  Pete Storli
-Created: Feb 14, 2020
-Email:   pstorli@gmail.com
-Phone:   971-888-2534
-Address: 18529 Chemawa Lne NE, Silverton, OR 97381
+Author:  Pete Storli\
+Created: Feb 14, 2020\
+Email:   pstorli@gmail.com\
+Phone:   971-888-2534\
+Address: 18529 Chemawa Lne NE, Silverton, OR 97381\\
 
-Design:  https://sites.google.com/site/storlidesignsllc/home/safetofly
-Resume:  https://sites.google.com/site/pstorli/resume
+Design:  https://sites.google.com/site/storlidesignsllc/home/safetofly\
+Resume:  https://sites.google.com/site/pstorli/resume\\
 
-Issues Resolved in version 1000:
+Issues Resolved in version 1000:\
 
   0000 Created initial project architecture diagram\
   0000 Created project and classes from  architecture diagram in AndroidStudio\
@@ -29,7 +29,7 @@ Issues Resolved in version 1000:
   0000 Added showMessage method to main activity, in addition to showSnackBar\
   0000 Added call to showMessage to explain that user needs to press plane to refresh data.\
    
-Known Issues:
+Known Issues:\
 
   0000 Check for correctness Cloud Ceiling formula: (temp - dew point) / 4.4 = feet above sea level\
   0000 Have app display map of current GPS location as the background.\
