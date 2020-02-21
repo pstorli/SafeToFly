@@ -22,6 +22,8 @@ Issues Resolved in version 1000:
   0000 Added code to determine gps location.
   0000 Added DarkSky key to local properties using BuildConfig, for safety.
   0000 Determined City, State and Zip from lat/lon using android.location.Geocoder
+  0000 Added support for landscape mode
+       added new safe_to_fly_fragment.xml to layout-land and new dimens.xml in values-land
    
 Known Issues:
 
