@@ -31,6 +31,7 @@ Issues Resolved in version 1000:
   0000 Changed to request location permissions\
   0000 Added showMessage method to main activity, in addition to showSnackBar\
   0000 Added call to showMessage to explain that user needs to press plane to refresh data.\
+  0000 Made Logo image backgrounds transparent
    
 Known Issues:
 
@@ -45,4 +46,3 @@ Known Issues:
   0000 jankapotamus.darkskyandroidwrapper caused several warnings to appear\
   0000 MainActivity.onRequestPermissionsResult getting expecting-member-declaration error?\
   0000 Need to add junit and expresso tests\
-  0000 Logo image backgrounds are black instead of transparent, easy fiX
