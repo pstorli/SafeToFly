@@ -207,20 +207,28 @@ class MainActivity : AppCompatActivity() {
             LOCATION_REQUEST_CODE)
     }
 
-    /**
-     * TODO: This is getting expecting member declaration error?
-     * This is called after the user either accepts or rejects the permission request.
-     *
-     */
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        // Was this the location request result?
-        if (LOCATION_REQUEST_CODE == requestCode) {
-            val text
-            if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                showSnackBar(getString(R.string.app_name), getString(R.string.permission_denied))
-            } else {
-                showSnackBar((getString(R.string.app_name), getString(R.string.permission_granted))
+
+    // Receive the permissions request result
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
+                                            grantResults: IntArray) {
+        when (requestCode) {
+            LOCATION_REQUEST_CODE -> {
+                // Get permission decision.
+                val isPermissionsGranted = grantResults[0] != PackageManager.PERMISSION_GRANTED
+
+                // Was it granted?
+                if(isPermissionsGranted){
+                    // Get fresh data.
+                    refreshData ()
+
+                    // Show granted snackbar.
+                    showSnackBar(getString(R.string.permission_granted))
+                }else{
+                    // Show denied snackbar.
+                    showSnackBar(getString(R.string.permission_denied))
+                }
+                return
             }
         }
-    }﻿
+    }
 }
