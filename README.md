@@ -12,6 +12,9 @@ Design:  https://sites.google.com/site/storlidesignsllc/home/safetofly
 
 Resume:  https://sites.google.com/site/pstorli/resume
 
+Drone Pilot Ground School
+blob:https://www.youtube.com/1ffd80ba-7123-411e-9e66-35b7f2a4266b
+
 Issues Resolved in version 1000:
 
   0000 Created initial project architecture diagram\
@@ -42,3 +45,4 @@ Known Issues:
   0000 jankapotamus.darkskyandroidwrapper caused several warnings to appear\
   0000 MainActivity.onRequestPermissionsResult getting expecting-member-declaration error?\
   0000 Need to add junit and expresso tests\
+  0000 Logo image backgrounds are black instead of transparent, easy fiX
