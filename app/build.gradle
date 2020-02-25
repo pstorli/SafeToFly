@@ -9,6 +9,17 @@ apply plugin: 'kotlin-kapt' // View and Data Binding for ui widgets.
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
+
+    // Gradle automatically adds 'android.test.runner' as a dependency.
+    useLibrary 'android.test.runner'
+    useLibrary 'android.test.base'
+    useLibrary 'android.test.mock'
+
+    testOptions {
+        unitTests.includeAndroidResources = true
+        unitTests.returnDefaultValues = true
+    }
+
     defaultConfig {
         applicationId "com.pstorli.safetofly"
         minSdkVersion 19
@@ -17,6 +28,7 @@ android {
         versionName "1000"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         buildTypes.each {
             Properties properties = new Properties()
@@ -40,9 +52,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     def lifecycle_version = "2.2.0"
 
@@ -63,4 +72,30 @@ dependencies {
 
     // Dark Sky Wrapper
     'com.charliealbright:dark-sky-android:1.0.0'
+
+    // Coroutine support
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3'
+
+    // /////////////////////////////////////////////////////////////////////////////////////////////
+    // Testing
+    // /////////////////////////////////////////////////////////////////////////////////////////////
+
+    testImplementation 'junit:junit:4.12'
+
+    // AndroidJUnitRunner and JUnit Rules
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test:rules:1.1.1'
+
+    // espresso support
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0')
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.1.0'
+
+    // for intent mocking
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.0'
+
+    // for network testing to track idle state
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    implementation 'androidx.test.espresso:espresso-idling-resource:3.1.0'
+
 }

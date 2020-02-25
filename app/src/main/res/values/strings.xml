@@ -42,11 +42,11 @@
     <string name="overall_status">Overall Status</string>
     <string name="permission_denied">Permission has been denied by user.</string>
     <string name="permission_granted">Permission has been granted by user.</string>
-    <string name="question">Question</string>
     <string name="raindrop">Raindrop</string>
     <string name="sunrise_text">Sunrise</string>
     <string name="sunset_text">Sunset</string>
     <string name="temp">%1$s F</string>
+    <string name="tip">Tip</string>
     <string name="visibility">%1$ssm</string>
     <string name="visText">Visibility</string>
     <string name="weather">WEATHER</string>

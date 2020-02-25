@@ -54,6 +54,11 @@ class SafeToFlyFragment : Fragment() {
     private lateinit var windDir:       TextView
     private lateinit var windStatus:    ImageView
 
+    // Extension function created to making switching between Data and LocalDateTime easier
+    fun Date.nano(): Long{
+        return time
+    }
+
     /**
      * Create the view.
      */
@@ -190,9 +195,9 @@ class SafeToFlyFragment : Fragment() {
 
         sunrise.text  = dateFormat.format(viewModel.sunrise)
         sunset.text   = dateFormat.format(viewModel.sunset)
-        time.text     = getString(R.string.dark_sky_time, dateFormat.format(viewModel.timeOfDay.time))
+        time.text     = getString(R.string.dark_sky_time, dateFormat.format(viewModel.timeOfDay.nano()))
 
-        val daylightLeft = viewModel.sunset.time - viewModel.timeOfDay.time
+        val daylightLeft = viewModel.sunset.nano() - viewModel.timeOfDay.nano()
 
         // Compute the remaining daylight.
         var minutes = 0

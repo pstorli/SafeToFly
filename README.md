@@ -33,17 +33,18 @@ Issues Resolved in version 1000:
   0000 Added call to showMessage to explain that user needs to press plane to refresh data.\
   0000 Made Logo image backgrounds transparent\
   0000 Added onRequestPermissionsResult to MainActivity to refresh data when permission granted.
-   
+  0000 Added Junit tests and Expresso Tests, including IdlingResource
+  0000 Added Extension function to Date.hour to making switching between Data and LocalDateTime easier
+
 Known Issues:
 
   0000 Check for correctness Cloud Ceiling formula: (temp - dew point) / 4.4 = feet above sea level\
   0000 Have app display map of current GPS location as the background.\
   0000 Add an AboutFragment and have it use new Google Screen Navigation system.\
-  0000 Added android:screenOrientation="portrait" until landscape screen is created and tested.\
   0000 In SafeToFlyViewModel.update, instead of picking item 0, go through list and find correct time for dailyForcast.\
-  0000 In SafeToFlyViewModel.update, we are using Date with no time zone. Fix to use LocalDateTime\
   0000 Remove jankapotamus.darkskyandroidwrapper and add in my own RDS and retrofit classes to get dark sky data.\
   0000 Dark Sky docs state that they return wind gusts for current conditions, but not there in jankapotamus.darkskyandroidwrapper\
   0000 jankapotamus.darkskyandroidwrapper caused several warnings to appear\
   0000 MainActivity.onRequestPermissionsResult getting expecting-member-declaration error?\
   0000 Need to add junit and expresso tests\
+  0000 In SafeToFlyViewModel.update, cannot use LocalDateTime, must use Date as 26 api required, on 19\

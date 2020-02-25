@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.pstorli.safetofly.data.SafeToFlyViewModel
 import com.pstorli.safetofly.screens.main.SafeToFlyFragment
+import com.pstorli.safetofly.util.DownloadIdlingResource
 
 class MainActivity : AppCompatActivity() {
     // Consts
@@ -26,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var overallStatusButton: ImageButton
     lateinit var fusedLocationClient: FusedLocationProviderClient
     lateinit var customView: View
+
+    lateinit var idlingRes: DownloadIdlingResource
 
     /**
      * Instance of MainActivity
@@ -40,7 +43,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     init {
-        inst = this
+        inst      = this
+        idlingRes = DownloadIdlingResource("BackgroundTask")
     }
 
     /**
@@ -150,6 +154,9 @@ class MainActivity : AppCompatActivity() {
             if (location != null) {
                 SafeToFlyViewModel.instance.gpsLoc = location
 
+                // Make expresso wait.
+                instance.idlingRes.setIdle (false)
+
                 // Get new data from Dark Sky. What's the weather?
                 SafeToFlyViewModel.instance.getData()
 
@@ -192,7 +199,7 @@ class MainActivity : AppCompatActivity() {
         // create dialog box
         val alert = dialogBuilder.create()
         // set title for alert dialog box
-        alert.setTitle(getString(R.string.question))
+        alert.setTitle(getString(R.string.tip))
         // show alert dialog
         alert.show()
     }
@@ -218,8 +225,8 @@ class MainActivity : AppCompatActivity() {
 
                 // Was it granted?
                 if(isPermissionsGranted){
-                    // Get fresh data.
-                    refreshData ()
+                    // Where are we?
+                    getLocation()
 
                     // Show granted snackbar.
                     showSnackBar(getString(R.string.permission_granted))
